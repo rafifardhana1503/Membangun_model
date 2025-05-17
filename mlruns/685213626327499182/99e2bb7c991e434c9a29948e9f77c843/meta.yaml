@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/685213626327499182/99e2bb7c991e434c9a29948e9f77c843/artifacts
+end_time: 1747466017828
+entry_point_name: ''
+experiment_id: '685213626327499182'
+lifecycle_stage: active
+run_id: 99e2bb7c991e434c9a29948e9f77c843
+run_name: Modelling_tunning_manuallog
+run_uuid: 99e2bb7c991e434c9a29948e9f77c843
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747466007956
+status: 3
+tags: []
+user_id: Rafif Idris Ardhana

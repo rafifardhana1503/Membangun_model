@@ -6,6 +6,7 @@ from sklearn.metrics import accuracy_score, classification_report
 import mlflow
 import mlflow.sklearn
 import os
+from dotenv import load_dotenv
 
 def modeling_with_tuning(filepath):
     # Load dataset
@@ -53,8 +54,15 @@ def modeling_with_tuning(filepath):
 if __name__ == "__main__":
     input_file = "dataset_preprocessing/telco-customer-churn_preprocessing.csv"
 
+    # Autentikasi ke DagsHub
+    load_dotenv()
+    username = os.getenv("MLFLOW_TRACKING_USERNAME")
+    password = os.getenv("MLFLOW_TRACKING_PASSWORD")
+    if not username or not password:
+        raise EnvironmentError("MLFLOW_TRACKING_USERNAME dan MLFLOW_TRACKING_PASSWORD harus di-set sebagai environment variable")
+
     # Set MLflow tracking URI
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_tracking_uri("https://dagshub.com/rafifardhana1503/Membangun_model.mlflow/")
     mlflow.set_experiment("Telco_Customer_Churn_Model_Tunning")
 
     with mlflow.start_run(run_name="Modelling_tunning_manuallog"):

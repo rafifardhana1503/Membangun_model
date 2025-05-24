@@ -8,16 +8,12 @@ import mlflow.sklearn
 import os
 from dotenv import load_dotenv
 
-def modeling_with_tuning(filepath):
-    # Load dataset
-    df = pd.read_csv(filepath)
-
-    # Pisahkan fitur target (Churn)
-    X = df.drop("Churn", axis=1)
-    y = df["Churn"]
-
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+def modeling_with_tuning(X_train_path, X_test_path, y_train_path, y_test_path):
+    # Load data hasil preprocessing & split
+    X_train = pd.read_csv(X_train_path)
+    X_test = pd.read_csv(X_test_path)
+    y_train = pd.read_csv(y_train_path).squeeze()
+    y_test = pd.read_csv(y_test_path).squeeze()
 
     # Menentukan hyperparameter grid
     param_grid = {
@@ -52,7 +48,11 @@ def modeling_with_tuning(filepath):
     return best_model, accuracy, report, grid_search.best_params_
 
 if __name__ == "__main__":
-    input_file = "dataset_preprocessing/telco-customer-churn_preprocessing.csv"
+    # Path dataset hasil split
+    X_train_path = "dataset_preprocessing/X_train.csv"
+    X_test_path = "dataset_preprocessing/X_test.csv"
+    y_train_path = "dataset_preprocessing/y_train.csv"
+    y_test_path = "dataset_preprocessing/y_test.csv"
 
     # Autentikasi ke DagsHub
     load_dotenv()
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     mlflow.set_experiment("Telco_Customer_Churn_Model_Tunning")
 
     with mlflow.start_run(run_name="Modelling_tunning_manuallog"):
-        model, accuracy, report, best_params = modeling_with_tuning(input_file)
+        model, accuracy, report, best_params = modeling_with_tuning(X_train_path, X_test_path, y_train_path, y_test_path)
 
         # Log params
         for param, value in best_params.items():

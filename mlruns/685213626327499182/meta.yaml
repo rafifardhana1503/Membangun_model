@@ -1,6 +1,0 @@
-artifact_location: mlflow-artifacts:/685213626327499182
-creation_time: 1747466007597
-experiment_id: '685213626327499182'
-last_update_time: 1747466007597
-lifecycle_stage: active
-name: Telco_Customer_Churn_Model_Tunning

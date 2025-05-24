@@ -1,17 +1,23 @@
 import mlflow.sklearn
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, classification_report
 import mlflow
 import mlflow.sklearn
+import os
+from dotenv import load_dotenv
 
-def modeling_with_tuning(X_train_path, X_test_path, y_train_path, y_test_path):
-    # Load data hasil preprocessing & split
-    X_train = pd.read_csv(X_train_path)
-    X_test = pd.read_csv(X_test_path)
-    y_train = pd.read_csv(y_train_path).squeeze()
-    y_test = pd.read_csv(y_test_path).squeeze()
+def modeling_with_tuning(filepath):
+    # Load dataset
+    df = pd.read_csv(filepath)
+
+    # Pisahkan fitur target (Churn)
+    X = df.drop("Churn", axis=1)
+    y = df["Churn"]
+
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Menentukan hyperparameter grid
     param_grid = {
@@ -46,18 +52,21 @@ def modeling_with_tuning(X_train_path, X_test_path, y_train_path, y_test_path):
     return best_model, accuracy, report, grid_search.best_params_
 
 if __name__ == "__main__":
-    # Path dataset hasil split
-    X_train_path = "dataset_preprocessing/X_train.csv"
-    X_test_path = "dataset_preprocessing/X_test.csv"
-    y_train_path = "dataset_preprocessing/y_train.csv"
-    y_test_path = "dataset_preprocessing/y_test.csv"
+    input_file = "dataset_preprocessing/telco-customer-churn_preprocessing.csv"
+
+    # Autentikasi ke DagsHub
+    load_dotenv()
+    username = os.getenv("MLFLOW_TRACKING_USERNAME")
+    password = os.getenv("MLFLOW_TRACKING_PASSWORD")
+    if not username or not password:
+        raise EnvironmentError("MLFLOW_TRACKING_USERNAME dan MLFLOW_TRACKING_PASSWORD harus di-set sebagai environment variable")
 
     # Set MLflow tracking URI
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_tracking_uri("https://dagshub.com/rafifardhana1503/Membangun_model.mlflow/")
     mlflow.set_experiment("Telco_Customer_Churn_Model_Tunning")
 
     with mlflow.start_run(run_name="Modelling_tunning_manuallog"):
-        model, accuracy, report, best_params = modeling_with_tuning(X_train_path, X_test_path, y_train_path, y_test_path)
+        model, accuracy, report, best_params = modeling_with_tuning(input_file)
 
         # Log params
         for param, value in best_params.items():

@@ -1,0 +1,15 @@
+artifact_uri: file:D:/Submission_Sistem Machine Learning/Membangun_model/mlruns/879127812842114306/36dda797b8ef4c0fa223e744eefd33f0/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '879127812842114306'
+lifecycle_stage: active
+run_id: 36dda797b8ef4c0fa223e744eefd33f0
+run_name: Modelling_autolog
+run_uuid: 36dda797b8ef4c0fa223e744eefd33f0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748052869027
+status: 1
+tags: []
+user_id: rafifardhana1503
